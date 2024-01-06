@@ -9,14 +9,7 @@
 */
 
 function calculateTotalSpentByCategory(transactions) {
-  let items = [];
-  for (const obj of transactions) {
-    if (!(items.includes(obj['category']))){
-      items.push(obj['category'])
-    }
-  }
-  console.log(items)
-  let item_obj = {};
+  let item_obj = {}; // an object containing { category : totalSpent }.
   for (const obj of transactions) {
     if (!(Object.hasOwn(item_obj,obj['category']))){
       item_obj[obj['category']] = 0;
@@ -25,6 +18,7 @@ function calculateTotalSpentByCategory(transactions) {
   for (const obj of transactions) {
     item_obj[obj['category']] += obj['price']
   }
+  // converting our item_obj into required output structure.
   const result = [];
   const categoryKeys = Object.keys(item_obj);
 
