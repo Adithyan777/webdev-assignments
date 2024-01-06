@@ -17,6 +17,50 @@
   - `npm run test-calculator`
 */
 
-class Calculator {}
+class Calculator {
+  constructor(){
+    this.result = 0;
+  }
+
+  add(num){
+    this.result += num;
+  }
+
+  subtract(num){
+    this.result -= num;
+  }
+
+  multiply(num){
+    this.result *= num;
+  }
+
+  divide(num){
+    if(num == 0){
+      throw new Error('Cannot divide by zero.')
+    }
+    this.result /= num;
+  }
+
+  clear(){
+    this.result = 0;
+  }
+
+  getResult(){
+    return this.result;
+  }
+
+  calculate(expression){
+    let expression2 = expression.replaceAll(" ",""); // removes all the whitespaces
+    try {
+      const res = new Function(`return ${expression2}`)(); // makes a Function object which returns the expression.
+      if (res == Infinity){ // if divide by zero
+        throw new Error('Cannot divide by zero.')
+      }
+      this.result = res;
+    } catch (error) {
+      throw new Error('Invalid expression');
+    }
+}
+}
 
 module.exports = Calculator;
