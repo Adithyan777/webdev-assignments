@@ -6,14 +6,14 @@ You have to follow the instructions given in each file and write the code in the
 ### Assignments
 Feel free to start doing these in any order you like.
 1. Easy
-   1. Anagram
-   2. Expenditure Analysis
+   1. Anagram✅
+   2. Expenditure Analysis✅
 2. Medium
-   1. Palindrome
-   2. Times
+   1. Palindrome✅
+   2. Times✅
 3. Hard
-   1. Calculator
-   2. Todo List
+   1. Calculator✅
+   2. Todo List ✅
 
 ## Testing
 1. Follow the comment above each problem to run test for that problem
