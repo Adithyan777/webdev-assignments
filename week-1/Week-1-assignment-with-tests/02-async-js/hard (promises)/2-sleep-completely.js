@@ -4,5 +4,10 @@
  */
 
 function sleep (seconds) {
-
+    console.log("Started file execution.");
+    let start = new Date().getTime();
+    while (new Date().getTime() - start < (seconds*1000)){
+        // do nothing
+    }
+    console.log("Finished waiting.")
 }
