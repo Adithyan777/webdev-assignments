@@ -32,6 +32,69 @@
 const express = require("express")
 const PORT = 3000;
 const app = express();
-// write your logic here, DONT WRITE app.listen(3000) when you're running tests, the tests will automatically start the server
 
+app.use(express.json());
+
+const users = [];
+
+app.get('/',(req,res)=>{
+  res.send('Welcome to Authentication server.')
+})
+
+app.post('/signup',(req,res)=>{
+  const newUser = req.body;
+  let flag = 1;
+  users.forEach(x=>{
+    if(x.username == newUser.username){
+      flag = 0;
+    }
+  })
+  if(flag){
+    newUser['id'] = 101 + users.length
+    users.push(newUser);
+    res.status(201).send('Signup successful')
+  }else{
+    res.status(400).send('username already exists.')
+  }
+})
+
+app.post('/login',(req,res)=>{
+  const body = req.body;
+  const user = users.find((item) => {
+    return item.username == body.username;
+  });
+  if(user){
+    if(user.password == body.password){
+      const response = { firstName : user.firstName, lastName: user.lastName, email:user.email, id: user.id}
+      res.status(200).send(response);
+    }else{
+      res.status(401).send('Unauthorized')
+    }
+  }else{
+    res.status(404).send('username doesnt exists.')
+  }
+})
+
+app.get('/data',(req,res)=>{
+  const usrname = req.headers.username
+  const pass = req.headers.password
+  const user = users.find((item) => {
+    return item.username == usrname;
+  });
+  if(user){
+    if(user.password == pass){
+      const response = {'users': users}
+      res.status(200).send(response);
+    }else{
+      res.status(401).send('Unauthorized')
+    }
+  }else{
+    res.status(404).send('username doesnt exists.')
+  }
+})
+
+// app.listen(PORT,()=>{
+//   console.log('App started listening on port '+ PORT);
+// })
+// write your logic here, DONT WRITE app.listen(3000) when you're running tests, the tests will automatically start the server
 module.exports = app;

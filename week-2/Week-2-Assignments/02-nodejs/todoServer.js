@@ -40,10 +40,111 @@
   Testing the server - run `npm run test-todoServer` command in terminal
  */
 const express = require('express');
-const bodyParser = require('body-parser');
-
 const app = express();
+const port = 3000;
 
-app.use(bodyParser.json());
+let todosArray = [];
+
+app.use(express.json())
+
+app.get('/',(req,res)=>{
+  res.send("Welcome to todos home page!")
+})
+
+app.get('/todos',(req,res)=>{
+  res.send(todosArray);
+})
+
+app.post('/todos',(req,res)=>{
+  const newTodo = req.body;
+  const id = todosArray.length + 101;
+  newTodo['id'] = id;
+  todosArray.push(newTodo);
+  res.status(201).send({'id':id});
+})
+
+app.get('/todos/:id', (req, res) => {
+  const id = req.params.id;
+  const foundTodo = todosArray.find(todo => todo.id == id);
+
+  if (foundTodo) {
+    res.send(foundTodo);
+  } else {
+    res.status(404).send({ error: 'id not found' });
+  }
+});
+
+app.put('/todos/:id', (req, res) => {
+  const id = req.params.id;
+  const foundTodo = todosArray.find(todo => todo.id == id);
+
+  if (foundTodo) {
+    foundTodo.title = req.body.title;
+    foundTodo.completed = req.body.completed;
+    res.send('Item found and updated.');
+  } else {
+    res.status(404).send({error: 'id not found'});
+  }
+});
+
+// app.get('/todos/:id',(req,res)=>{
+//   let foundTodo = undefined;
+//   const id = req.params.id;
+//   todosArray.forEach((x)=>{
+//     if (x['id'] == id){ // need to optimize the looping to add break.
+//       foundTodo = x;
+//     }
+//   })
+//   if(foundTodo){
+//     res.send(foundTodo);
+//   }
+//   else{
+//     res.status(404).send({error : 'id not found'})
+//   }
+// })
+
+// app.put('/todos/:id',(req,res)=>{
+//   let flag = 0;
+//   requestTodo = req.body;
+//   id = req.params.id;
+//   todosArray.forEach((x)=>{
+//     if(x['id'] == id){
+//       flag = 1;
+//       x['title'] = requestTodo['title'];
+//       x['completed'] = requestTodo['completed'];
+//     }
+//   })
+//   if(flag == 1){
+//     res.send('Item found and updated.')
+//   }else{
+//     res.status(404).send('id not found')
+//   }
+
+// })
+
+app.delete('/todos/:id',(req,res)=>{
+  let flag = 0;
+  idToRemove = req.params.id;
+  todosArray = todosArray.filter(item => {
+    if(item.id == idToRemove){
+      flag = 1;
+      return false;
+    }
+    return true; 
+  })
+  if(flag == 1){
+    res.send('Item found and deleted.')
+  }else{
+    res.status(404).send('id not found')
+  }
+})
+
+// not needed as the app is started within the testfile.
+
+/*
+app.listen(port,()=>{
+  console.log("Server started listening on port "+port);
+})
+*/
 
 module.exports = app;
